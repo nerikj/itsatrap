@@ -1,3 +1,5 @@
+import PIXI from 'pixi.js';
+
 class Renderable {
   constructor() {
     this.graphics = new PIXI.Graphics();

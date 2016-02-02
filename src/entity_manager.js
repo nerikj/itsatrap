@@ -28,6 +28,20 @@ class EntityManager {
     return uuidgen.v1();
   }
 
+  component_by_type(entity, type) {
+    const store = this.component_stores[type];
+    if (!store) {
+      return undefined;
+    }
+
+    const components = store[entity];
+    if (!components) {
+      return undefined;
+    }
+
+    return components[0];
+  }
+
   // create_tagged_entity(tag) {
 
   //   this.entities_by_id[uuid] = tag;
