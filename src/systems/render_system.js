@@ -7,16 +7,14 @@ class RenderSystem {
     document.body.appendChild(this.renderer.view);
   }
 
-  tick(entity_manager) {
+  tick(stage, entity_manager) {
     const entities = entity_manager.entities_having_component("Renderable");
-    this.stage = new PIXI.Container();
-
     for (var entity of entities) {
       const comp = entity_manager.component_by_type(entity, "Renderable");
-      this.stage.addChild(comp.graphics);
+      stage.addChild(comp.graphics);
     }
 
-    this.renderer.render(this.stage);
+    this.renderer.render(stage);
   }
 }
 
