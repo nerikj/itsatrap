@@ -24,6 +24,11 @@ module.exports = {
 				loader: 'json'
 			},
       {
+        test: /\.json$/,
+        include: path.join(__dirname, 'node_modules', 'p2'),
+        loader: 'json'
+      },
+      {
         test: /\.css$/,
         exclude: [/node_modules/, /dist/],
         loader: "style!css"
