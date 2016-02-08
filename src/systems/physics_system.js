@@ -1,10 +1,11 @@
-import p2 from 'p2';
+import p2, { vec2 } from 'p2';
 
 class PhysicsSystem {
   constructor() {
     this.world = new p2.World({
       gravity: [0, 0]
     });
+    this.world.defaultContactMaterial.friction = 0;
     this.timeStep = 1 / 60;
 
     this.world.on("beginContact",function(event) {
@@ -38,27 +39,44 @@ class PhysicsSystem {
     this.rp.material = new p2.Material();
     r.addShape(this.rp);
     this.world.addBody(r);
+
+    this.tp.collisionGroup = Math.pow(2, 1);
+    this.bp.collisionGroup = Math.pow(2, 1);
+    this.lp.collisionGroup = Math.pow(2, 1);
+    this.rp.collisionGroup = Math.pow(2, 1);
+    this.tp.collisionMask = Math.pow(2, 2);
+    this.bp.collisionMask = Math.pow(2, 2);
+    this.lp.collisionMask = Math.pow(2, 2);
+    this.rp.collisionMask = Math.pow(2, 2);
   }
 
   addBody(body, shape) {
-    // If we don't add the body to the world, it won't be simulated.
     this.world.addBody(body);
 
+    shape.collisionGroup = Math.pow(2, 2);
+    shape.collisionMask = Math.pow(2, 2) | Math.pow(2, 1);
+
+    const restitution = 0.2;
+    const friction = 0;
     console.log("Adding material", this.bp.material, shape.material);
     this.world.addContactMaterial(new p2.ContactMaterial(this.bp.material, shape.material, {
-      restitution : 0.5,
+      restitution : restitution,
+      friction: friction,
       stiffness : Number.MAX_VALUE // We need infinite stiffness to get exact restitution
     }));
     this.world.addContactMaterial(new p2.ContactMaterial(this.tp.material, shape.material, {
-      restitution : 0.5,
+      restitution : restitution,
+      friction: friction,
       stiffness : Number.MAX_VALUE // We need infinite stiffness to get exact restitution
     }));
     this.world.addContactMaterial(new p2.ContactMaterial(this.lp.material, shape.material, {
-      restitution : 0.5,
+      restitution : restitution,
+      friction: friction,
       stiffness : Number.MAX_VALUE // We need infinite stiffness to get exact restitution
     }));
     this.world.addContactMaterial(new p2.ContactMaterial(this.rp.material, shape.material, {
-      restitution : 0.5,
+      restitution : restitution,
+      friction: friction,
       stiffness : Number.MAX_VALUE // We need infinite stiffness to get exact restitution
     }));
   }
@@ -67,23 +85,43 @@ class PhysicsSystem {
     const entities = entity_manager.entities_having_component("Moveable");
 
     for (var entity of entities) {
-      const ph = entity_manager.component_by_type(entity, "Physics");
+      const ph = entity_manager.component_by_type(entity, "PhysicsComponent");
       const comp = entity_manager.component_by_type(entity, "Moveable");
-      ph.body.velocity[0] = 0;
-      ph.body.velocity[1] = 0;
 
-      if (comp.left)  { ph.body.velocity[0] = -200; }
-      if (comp.right) { ph.body.velocity[0] = 200; }
-      if (comp.up)    { ph.body.velocity[1] = -200; }
-      if (comp.down)  { ph.body.velocity[1] = 200; }
+      var force = 500;
+      var maxVelocity = 175;
+      // TODO Need to check maxVelocity against both x and y velocity if moving diagonally
+      if (comp.left && ph.body.velocity[0] > -maxVelocity) {
+        // var f = [];
+        // vec2.add(f, ph.body.velocity[0], ph.body.velocity[1]);
+        // console.log(f);
+        ph.body.applyForceLocal([-force, 0]);
+        //console.log(ph.body.velocity);
+        //ph.body.velocity[0] = -200;
+      }
+      if (comp.right && ph.body.velocity[0] < maxVelocity) {
+        ph.body.applyForceLocal([force, 0]);
+        //ph.body.velocity[0] = 200;
+      }
+      if (comp.up && ph.body.velocity[1] > -maxVelocity) {
+        ph.body.applyForceLocal([0, -force]);
+        //ph.body.velocity[1] = -200;
+      }
+      if (comp.down && ph.body.velocity[1] < maxVelocity) {
+        ph.body.applyForceLocal([0, force]);
+        //ph.body.velocity[1] = 200;
+      }
+
+      //console.log(ph.body.velocity);
+      //console.log(ph.body.velocity);
     }
 
     this.world.step(this.timeStep);
 
-    const entities2 = entity_manager.entities_having_component("Physics");
+    const entities2 = entity_manager.entities_having_component("PhysicsComponent");
     // TODO Mediate via a position component instead of setting directly on graphics object?
     for (var entity2 of entities2) {
-      const ph = entity_manager.component_by_type(entity2, "Physics");
+      const ph = entity_manager.component_by_type(entity2, "PhysicsComponent");
       const comp = entity_manager.component_by_type(entity2, "Renderable");
       comp.graphics.x = ph.body.position[0];
       comp.graphics.y = ph.body.position[1];

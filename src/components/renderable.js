@@ -2,7 +2,7 @@ import PIXI from 'pixi.js';
 
 class Renderable {
   constructor(graphics) {
-    this.graphics = graphics;
+    this.graphics = new PIXI.Graphics();
   }
 }
 
