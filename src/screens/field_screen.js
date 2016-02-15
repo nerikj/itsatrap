@@ -27,7 +27,7 @@ class FieldScreen {
 
   render() {
     this.input_system.tick(this.entity_manager);
-    this.physics_system.tick(this.stage, this.entity_manager);
+    this.physics_system.tick(this.entity_manager);
     this.render_system.tick(this.entity_manager);
   }
 

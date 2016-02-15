@@ -81,7 +81,7 @@ class PhysicsSystem {
     }));
   }
 
-  tick(stage, entity_manager) {
+  tick(entity_manager) {
     const entities = entity_manager.entities_having_component("Moveable");
 
     for (var entity of entities) {
