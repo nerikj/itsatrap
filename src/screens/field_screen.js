@@ -16,10 +16,12 @@ class FieldScreen {
     this.physics_system = new PhysicsSystem();
     this.render_system = new RenderSystem();
 
-    ArenaFactory.create(this.entity_manager);
+    ArenaFactory.create(this.entity_manager, this.physics_system);
     const p = PlayerFactory.create(this.entity_manager, this.physics_system);
     const b = BallFactory.create(this.entity_manager, this.physics_system);
-    this.physics_system.world.addContactMaterial(ContactMaterial.NONE_NONE);
+    this.physics_system.world.addContactMaterial(ContactMaterial.BALL_PLAYER);
+    this.physics_system.world.addContactMaterial(ContactMaterial.BALL_WALL);
+    this.physics_system.world.addContactMaterial(ContactMaterial.PLAYER_WALL);
   }
 
   render() {

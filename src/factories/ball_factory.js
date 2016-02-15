@@ -1,5 +1,6 @@
 import PhysicsComponent from "../components/physics_component.js";
 import Renderable from "../components/renderable.js";
+import Material from "../material.js";
 
 class BallFactory {
   static create(entity_manager, physics_system) {
@@ -11,7 +12,7 @@ class BallFactory {
     r.graphics.drawCircle(0, 0, 10);
     entity_manager.add_component(ball, r);
 
-    const p = new PhysicsComponent(10, {
+    const p = new PhysicsComponent(10, Material.BALL, {
       mass: 1.25,
       position: [200, 130],
       damping: 0.2

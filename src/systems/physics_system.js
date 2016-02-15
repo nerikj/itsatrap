@@ -14,71 +14,10 @@ class PhysicsSystem {
     this.world.on("endContact",function(event) {
       console.log("Clear");
     });
-
-    // http://paulsalaets.com/posts/planes-in-p2/
-    var b = new p2.Body();
-    this.bp = new p2.Plane();
-    this.bp.material = new p2.Material();
-    b.addShape(this.bp);
-    this.world.addBody(b);
-
-    var t = new p2.Body({ position: [0, 600], angle: Math.PI });
-    this.tp = new p2.Plane();
-    this.tp.material = new p2.Material();
-    t.addShape(this.tp);
-    this.world.addBody(t);
-
-    var l = new p2.Body({ position: [0, 0], angle: (3 * Math.PI) / 2 });
-    this.lp = new p2.Plane();
-    this.lp.material = new p2.Material();
-    l.addShape(this.lp);
-    this.world.addBody(l);
-
-    var r = new p2.Body({ position: [800, 0], angle: Math.PI / 2 });
-    this.rp = new p2.Plane();
-    this.rp.material = new p2.Material();
-    r.addShape(this.rp);
-    this.world.addBody(r);
-
-    this.tp.collisionGroup = Math.pow(2, 1);
-    this.bp.collisionGroup = Math.pow(2, 1);
-    this.lp.collisionGroup = Math.pow(2, 1);
-    this.rp.collisionGroup = Math.pow(2, 1);
-    this.tp.collisionMask = Math.pow(2, 2);
-    this.bp.collisionMask = Math.pow(2, 2);
-    this.lp.collisionMask = Math.pow(2, 2);
-    this.rp.collisionMask = Math.pow(2, 2);
   }
 
   addBody(body, shape) {
     this.world.addBody(body);
-
-    shape.collisionGroup = Math.pow(2, 2);
-    shape.collisionMask = Math.pow(2, 2) | Math.pow(2, 1);
-
-    const restitution = 0.2;
-    const friction = 0;
-    console.log("Adding material", this.bp.material, shape.material);
-    this.world.addContactMaterial(new p2.ContactMaterial(this.bp.material, shape.material, {
-      restitution : restitution,
-      friction: friction,
-      stiffness : Number.MAX_VALUE // We need infinite stiffness to get exact restitution
-    }));
-    this.world.addContactMaterial(new p2.ContactMaterial(this.tp.material, shape.material, {
-      restitution : restitution,
-      friction: friction,
-      stiffness : Number.MAX_VALUE // We need infinite stiffness to get exact restitution
-    }));
-    this.world.addContactMaterial(new p2.ContactMaterial(this.lp.material, shape.material, {
-      restitution : restitution,
-      friction: friction,
-      stiffness : Number.MAX_VALUE // We need infinite stiffness to get exact restitution
-    }));
-    this.world.addContactMaterial(new p2.ContactMaterial(this.rp.material, shape.material, {
-      restitution : restitution,
-      friction: friction,
-      stiffness : Number.MAX_VALUE // We need infinite stiffness to get exact restitution
-    }));
   }
 
   tick(entity_manager) {
