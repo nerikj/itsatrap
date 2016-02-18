@@ -14,6 +14,10 @@ io.on('connection', (socket) => {
   players[socket] = {};
   socket.emit('chat', 'Hi ' + socket.id);
 
+  socket.on('move', (msg) => {
+    console.log(socket.id, 'move: ', msg);
+  });
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });

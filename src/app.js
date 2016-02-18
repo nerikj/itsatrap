@@ -6,7 +6,7 @@ import Game from './game.js';
 import Keyboard from './keyboard.js';
 import io from 'socket.io-client';
 
-const socket = io("http://localhost:3000");
+const socket = io("http://10.15.1.34:3000");
 
 socket.on('connect', () => {
   socket.on('chat', (msg) => {
@@ -16,5 +16,5 @@ socket.on('connect', () => {
 
 Keyboard.init();
 
-const g = new Game();
+const g = new Game(socket);
 g.start();
