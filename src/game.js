@@ -1,10 +1,9 @@
 import FieldScreen from "./screens/field_screen.js";
 
 class Game {
-  constructor(socket) {
+  constructor() {
     console.log("Creating game");
-    this.socket = socket;
-    this.screen = new FieldScreen(this.socket);
+    this.screen = new FieldScreen();
     this.mainLoop = this.mainLoop.bind(this);
   }
 

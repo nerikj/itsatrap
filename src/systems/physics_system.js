@@ -62,8 +62,8 @@ class PhysicsSystem {
     for (var entity2 of entities2) {
       const ph = entity_manager.component_by_type(entity2, "PhysicsComponent");
       const comp = entity_manager.component_by_type(entity2, "Renderable");
-      comp.graphics.x = ph.body.position[0];
-      comp.graphics.y = ph.body.position[1];
+      //comp.graphics.x = ph.body.position[0];
+      //comp.graphics.y = ph.body.position[1];
     }
   }
 }

@@ -8,20 +8,17 @@ import BallFactory from "../factories/ball_factory.js";
 import PlayerFactory from "../factories/player_factory.js";
 import { ContactMaterial } from "../material.js";
 import PIXI from 'pixi.js';
-import p2 from 'p2';
 
 class FieldScreen {
-  constructor(socket) {
-    this.socket = socket;
+  constructor() {
     this.entity_manager = new EntityManager();
     this.input_system = new InputSystem();
-    this.network_system = new NetworkSystem(this.socket);
     this.physics_system = new PhysicsSystem();
+    this.network_system = new NetworkSystem(this.entity_manager, this.physics_system);
     this.render_system = new RenderSystem();
 
     ArenaFactory.create(this.entity_manager, this.physics_system);
-    const p = PlayerFactory.create(this.entity_manager, this.physics_system);
-    const b = BallFactory.create(this.entity_manager, this.physics_system);
+    //const b = BallFactory.create(this.entity_manager, this.physics_system);
     this.physics_system.world.addContactMaterial(ContactMaterial.BALL_PLAYER);
     this.physics_system.world.addContactMaterial(ContactMaterial.BALL_WALL);
     this.physics_system.world.addContactMaterial(ContactMaterial.PLAYER_WALL);
@@ -30,7 +27,7 @@ class FieldScreen {
   render() {
     this.input_system.tick(this.entity_manager);
     this.network_system.tick(this.entity_manager);
-    this.physics_system.tick(this.entity_manager);
+    //this.physics_system.tick(this.entity_manager);
     this.render_system.tick(this.entity_manager);
   }
 

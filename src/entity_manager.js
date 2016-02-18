@@ -24,8 +24,13 @@ class EntityManager {
     }
   }
 
-  create_entity() {
-    return uuidgen.v1();
+  create_entity(uuid = uuidgen.v1()) {
+    this.entities_by_id[uuid] = {};
+    return uuid;
+  }
+
+  has_entity(entity) {
+    return !!this.entities_by_id[entity];
   }
 
   component_by_type(entity, type) {

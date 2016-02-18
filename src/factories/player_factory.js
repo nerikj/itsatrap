@@ -5,12 +5,14 @@ import Renderable from "../components/renderable.js";
 import Material from "../material.js";
 
 class PlayerFactory {
-  static create(entity_manager, physics_system) {
-    const player = entity_manager.create_entity();
+  static create(entity_manager, physics_system, id) {
+    const player = entity_manager.create_entity(id);
 
     const r = new Renderable();
     r.graphics.lineStyle(0);
-    r.graphics.beginFill(0x00ff00, 0.5);
+    const rgb = [Math.floor(Math.random() * 255) + 1, Math.floor(Math.random() * 255) + 1, Math.floor(Math.random() * 255) + 1]
+    const color = ((rgb[0]*255 << 16) + (rgb[1]*255 << 8) + rgb[2]*255);
+    r.graphics.beginFill(color, 0.5);
     r.graphics.drawCircle(0, 0, 15);
     entity_manager.add_component(player, r);
 

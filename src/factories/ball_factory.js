@@ -3,8 +3,8 @@ import Renderable from "../components/renderable.js";
 import Material from "../material.js";
 
 class BallFactory {
-  static create(entity_manager, physics_system) {
-    const ball = entity_manager.create_entity();
+  static create(entity_manager, physics_system, id) {
+    const ball = entity_manager.create_entity(id);
 
     const r = new Renderable();
     r.graphics.lineStyle(1, 0x0000ff);
